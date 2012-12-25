@@ -1,45 +1,64 @@
-ig.module( 
-	'game.main' 
-)
-.requires(
-	'impact.game',
-	'impact.font'
-)
-.defines(function(){
+ig.module(
+        'game.main'
+    )
+    .requires(
+        'impact.game',
+        'impact.font',
+        'game.levels.levelOne'
+    )
+    .defines(function () {
 
-MyGame = ig.Game.extend({
-	
-	// Load a font
-	font: new ig.Font( 'media/04b03.font.png' ),
-	
-	
-	init: function() {
-		// Initialize your game here; bind keys etc.
-	},
-	
-	update: function() {
-		// Update all entities and backgroundMaps
-		this.parent();
-		
-		// Add your own, additional update code here
-	},
-	
-	draw: function() {
-		// Draw all entities and backgroundMaps
-		this.parent();
-		
-		
-		// Add your own drawing code here
-		var x = ig.system.width/2,
-			y = ig.system.height/2;
-		
-		this.font.draw( 'It Works!', x, y, ig.Font.ALIGN.CENTER );
-	}
-});
+        MyGame = ig.Game.extend({
+            gravity: 300,
+            font: new ig.Font('media/04b03.font.png'),
+
+            init: function () {
+                ig.input.bind(ig.KEY.LEFT_ARROW, 'left');
+                ig.input.bind(ig.KEY.RIGHT_ARROW, 'right');
+                ig.input.bind(ig.KEY.UP_ARROW, 'jump');
+                ig.input.bind(ig.KEY.SPACE, 'jump');
+                this.loadLevel(LevelLevelOne);
+            },
+
+            update: function () {
+                this._setCameraPosition();
+                this._checkCameraIsInBounds.call(this);
+                this.parent();
+            },
+
+            draw: function () {
+                this.parent();
+            },
+
+            _setCameraPosition: function () {
+                var player = this.getEntitiesByType(EntityArchie)[0];
+                if (player) {
+                    if (player.hasPassedHalfway) {
+                        this.screen.x = player.pos.x - ig.system.width * 0.5;
+                    }
+                    this.screen.y = player.pos.y - ig.system.height * 0.5;
+                }
+            },
+
+            _checkCameraIsInBounds: function () {
+                if (this.screen.x <= 0) {
+                    this.screen.x = 0;
+                }
+                if (this.screen.y <= 0) {
+                    this.screen.y = 0;
+                }
+                if (this.screen.x >= this.collisionMap.width * this.collisionMap.tilesize - ig.system.width) {
+                    this.screen.x = this.collisionMap.width * this.collisionMap.tilesize - ig.system.width;
+                }
+
+                if (this.screen.y >= this.collisionMap.height * this.collisionMap.tilesize - ig.system.height) {
+                    this.screen.y = this.collisionMap.height * this.collisionMap.tilesize - ig.system.height;
+                }
+            }
+        });
 
 
 // Start the Game with 60fps, a resolution of 320x240, scaled
 // up by a factor of 2
-ig.main( '#canvas', MyGame, 60, 320, 240, 2 );
-
-});
+        ig.main('#canvas', MyGame, 60, 1000, 750, 1);
+    });
