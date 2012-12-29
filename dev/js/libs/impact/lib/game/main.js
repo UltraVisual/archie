@@ -4,14 +4,14 @@ ig.module(
     .requires(
         'impact.game',
         'impact.font',
-        'game.levels.levelOne'
+        'game.levels.levelOne',
+        'game.models.player-health-model'
     )
     .defines(function () {
-
         MyGame = ig.Game.extend({
+            healthModel: new PlayerHealthModel(),
             gravity: 300,
             font: new ig.Font('media/04b03.font.png'),
-
             init: function () {
                 ig.input.bind(ig.KEY.LEFT_ARROW, 'left');
                 ig.input.bind(ig.KEY.RIGHT_ARROW, 'right');
@@ -57,8 +57,5 @@ ig.module(
             }
         });
 
-
-// Start the Game with 60fps, a resolution of 320x240, scaled
-// up by a factor of 2
         ig.main('#canvas', MyGame, 60, 1000, 750, 1);
     });
