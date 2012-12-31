@@ -1,23 +1,31 @@
 ig.module('game.levels.levelOne')
-    .requires('impact.image', 'game.entities.blocker', 'game.entities.green-dino', 'game.entities.archie', 'game.entities.health-bar')
+    .requires('impact.image', 'game.entities.blocker', 'game.entities.archie', 'game.entities.green-dino', 'game.entities.coin', 'game.entities.health-bar')
     .defines(function () {
         LevelLevelOne = /*JSON[*/{"entities": [
-            {"type": "EntityBlocker", "x": 1344, "y": 156},
-            {"type": "EntityGreenDino", "x": 644, "y": 436},
+            {"type": "EntityBlocker", "x": 2176, "y": 416},
+            {"type": "EntityArchie", "x": 36, "y": 528},
             {"type": "EntityGreenDino", "x": 1992, "y": 148},
             {"type": "EntityGreenDino", "x": 2312, "y": 404},
             {"type": "EntityGreenDino", "x": 2440, "y": 116},
+            {"type": "EntityBlocker", "x": 2080, "y": 160},
+            {"type": "EntityGreenDino", "x": 644, "y": 436},
+            {"type": "EntityBlocker", "x": 2336, "y": 128},
             {"type": "EntityBlocker", "x": 1184, "y": 160},
+            {"type": "EntityBlocker", "x": 1344, "y": 156},
             {"type": "EntityGreenDino", "x": 1292, "y": 148},
             {"type": "EntityBlocker", "x": 800, "y": 444},
-            {"type": "EntityArchie", "x": 36, "y": 528},
             {"type": "EntityBlocker", "x": 1856, "y": 160},
-            {"type": "EntityBlocker", "x": 2080, "y": 160},
-            {"type": "EntityBlocker", "x": 2176, "y": 416},
-            {"type": "EntityBlocker", "x": 2336, "y": 128},
             {"type": "EntityBlocker", "x": 2496, "y": 128},
             {"type": "EntityBlocker", "x": 576, "y": 448},
-            {"type": "EntityHealthBar", "x": 35, "y": -55}
+            {"type": "EntityCoin", "x": 512, "y": 224},
+            {"type": "EntityCoin", "x": 672, "y": 160},
+            {"type": "EntityCoin", "x": 992, "y": 128},
+            {"type": "EntityCoin", "x": 2656, "y": 64},
+            {"type": "EntityCoin", "x": 2240, "y": 224},
+            {"type": "EntityCoin", "x": 1472, "y": 64},
+            {"type": "EntityCoin", "x": 2208, "y": 224},
+            {"type": "EntityCoin", "x": 1728, "y": 64},
+            {"type": "EntityHealthBar", "x": 35, "y": 35}
         ], "layer": [
             {"name": "collision", "width": 100, "height": 20, "linkWithCollision": false, "visible": 1, "tilesetName": "", "repeat": false, "preRender": false, "distance": 1, "tilesize": 32, "foreground": false, "data": [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -1,17 +1,21 @@
 ig.module(
-        'game.models.player-health-model'
+        'game.models.player-model'
     )
     .requires(
         'impact.entity'
     )
     .defines(function () {
-        PlayerHealthModel = function () {
+        PlayerModel = function () {
         };
-        PlayerHealthModel.prototype = {
+        PlayerModel.prototype = {
             health: 10,
             pos: {x: 35, y: 35},
+            score: 0,
             setHealth: function (val) {
                 this.health = val;
+            },
+            setScore:function(val){
+               this.score = val;
             }
         };
     });

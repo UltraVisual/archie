@@ -5,11 +5,11 @@ ig.module(
         'impact.game',
         'impact.font',
         'game.levels.levelOne',
-        'game.models.player-health-model'
+        'game.models.player-model'
     )
     .defines(function () {
         MyGame = ig.Game.extend({
-            healthModel: new PlayerHealthModel(),
+            model: new PlayerModel(),
             gravity: 300,
             font: new ig.Font('media/04b03.font.png'),
             init: function () {

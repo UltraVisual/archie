@@ -3,7 +3,7 @@ ig.module(
     )
     .requires(
         'impact.entity',
-        'game.models.player-health-model'
+        'game.models.player-model'
     )
     .defines(function () {
         EntityHealthBar = ig.Entity.extend({
@@ -13,7 +13,9 @@ ig.module(
             collides: ig.Entity.COLLIDES.FIXED,
             type: ig.Entity.TYPE.NONE,
             gravityFactor: 0,
+            font: new ig.Font('media/04b03.font.png'),
             checkAgainst: ig.Entity.TYPE.NONE,
+            currentHealth: 10,
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.zIndex = 100;
@@ -28,15 +30,19 @@ ig.module(
                 this.addAnim('2', 1, [2]);
                 this.addAnim('1', 1, [1]);
                 this.addAnim('0', 1, [0]);
-
-                this.currentAnim = this.anims['10'];
             },
             update: function () {
-                var healthModel = ig.game.healthModel;
+                var healthModel = ig.game.model || new PlayerModel();
                 this.pos.x = ig.game.screen.x + healthModel.pos.x;
                 this.pos.y = ig.game.screen.y + healthModel.pos.y;
-                this.currentAnim = this.anims[this.states[healthModel.health]];
-                this.parent()
+                this.currentHealth = healthModel.health;
+                this.currentAnim = this.anims[this.states[this.currentHealth]];
+                this.parent();
+            },
+            draw: function () {
+                this.parent();
+                this.font.draw((this.currentHealth * 10).toString() + '%', (this.pos.x - ig.game.screen.x) + 180, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
+                this.font.draw("Score:" + (ig.game.model ? ig.game.model.score : 0).toString(), (this.pos.x - ig.game.screen.x) + 850, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
             }
         })
     });

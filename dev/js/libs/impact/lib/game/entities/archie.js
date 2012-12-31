@@ -25,15 +25,16 @@ ig.module(
             hasPassedHalfway: false,
             interval: 0,
             alpha: 1,
-            healthModel: {},
+            model: {},
+            jumpPressed: 0,
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.startPosition = {x: x, y: y};
                 this.addAnim('idle', 1, [0]);
                 this.addAnim('walk', 0.03, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]);
                 this.flip = false;
-                this.healthModel = ig.game.healthModel;
-                this.health = this.healthModel.health;
+                this.model = ig.game.model || new PlayerModel();
+                this.health = this.model.health;
             },
             reset:function () {
                 this.alpha = 1;
@@ -59,8 +60,9 @@ ig.module(
                             self.flash();
                         }, 200);
                     }
+                    //TODO make player jump back when hit?
                 }
-                this.healthModel.setHealth(this.health);
+                this.model.setHealth(this.health);
             },
             flash: function () {
                 this.flashAmount++;
@@ -80,6 +82,7 @@ ig.module(
                 }
                 else if (ig.input.state('right')) {
                     this.accel.x = acceleration;
+                    if(ig.game.model) ig.game.model.setScore(ig.game.model.score + 1);
                     this.flip = false;
                 }
                 else {
@@ -87,14 +90,18 @@ ig.module(
                 }
 
                 if (this.standing && ig.input.pressed('jump') || this.jumping && ig.input.pressed('jump')) {
-                    this.vel.y = -this.jump;
-                    this.jumping = true;
+                    if(this.jumpPressed <= 1){
+                        this.vel.y = -this.jump;
+                        this.jumping = true;
+                        this.jumpPressed++;
+                    }
                 }
                 if (this.vel.y < 0) {
                     //jumping anim
                 }
                 else if (this.vel.y > 0) {
                     this.jumping = false;
+                    this.jumpPressed = 0;
                     //falling anim
                 }
                 else if (this.vel.x != 0) {
