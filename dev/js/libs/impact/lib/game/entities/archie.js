@@ -8,7 +8,7 @@ ig.module(
         EntityArchie = ig.Entity.extend({
             size: {x: 32, y: 48},
             friction: {x: 600, y: 0},
-            animSheet: new ig.AnimationSheet('media/archie.png', 32, 48),
+            animSheet: new ig.AnimationSheet('media/archie.png', 42, 48),
             maxVel: {x: 100, y: 150},
             collides: ig.Entity.COLLIDES.ACTIVE,
             type: ig.Entity.TYPE.A,
@@ -27,11 +27,18 @@ ig.module(
             alpha: 1,
             model: {},
             jumpPressed: 0,
+            currentWalkMode : 'walk-basic',
+            currentIdleMode: 'idle',
+            currentJumpMode: 'jump',
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.startPosition = {x: x, y: y};
                 this.addAnim('idle', 1, [0]);
-                this.addAnim('walk', 0.03, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]);
+                this.addAnim('idle-with-gun', 1, [23]);
+                this.addAnim('walk-basic', 0.03, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
+                this.addAnim('walk-with-gun', 0.03, [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]);
+                this.addAnim('jump', 0.03, [44]);
+                this.addAnim('jump-with-gun', 0.03, [45]);
                 this.flip = false;
                 this.model = ig.game.model || new PlayerModel();
                 this.health = this.model.health;
@@ -74,6 +81,11 @@ ig.module(
                     this.reset();
                 }
             },
+            enableGun:function(){
+                this.currentWalkMode = 'walk-with-gun';
+                this.currentIdleMode = 'idle-with-gun';
+                this.currentJumpMode = 'jump-with-gun';
+            },
             update: function () {
                 var acceleration = this.standing ? this.accelGround : this.accelAir;
                 if (ig.input.state('left')) {
@@ -97,18 +109,18 @@ ig.module(
                     }
                 }
                 if (this.vel.y < 0) {
-                    //jumping anim
+                    this.currentAnim = this.anims[this.currentJumpMode];
                 }
                 else if (this.vel.y > 0) {
                     this.jumping = false;
                     this.jumpPressed = 0;
-                    //falling anim
+                    this.currentAnim = this.anims[this.currentJumpMode];
                 }
-                else if (this.vel.x != 0) {
-                    this.currentAnim = this.anims.walk;
+                if (this.vel.x != 0) {
+                    this.currentAnim = this.anims[this.currentWalkMode];
                 }
                 else {
-                    this.currentAnim = this.anims.idle;
+                    this.currentAnim = this.anims[this.currentIdleMode];
                 }
                 this.currentAnim.alpha = this.alpha;
                 this.hasPassedHalfway = this.pos.x >= ig.system.width * 0.5;
