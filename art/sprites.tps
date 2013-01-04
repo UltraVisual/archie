@@ -143,6 +143,7 @@
         <array>
             <filename>coin.png</filename>
             <filename>gun.png</filename>
+            <filename>egg.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

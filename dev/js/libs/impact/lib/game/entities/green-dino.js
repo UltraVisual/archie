@@ -45,6 +45,13 @@ ig.module(
                 if (typeof other.hit != 'undefined') {
                     other.hit();
                 }
+            },
+            hit: function () {
+                this.kill();
+            },
+            kill:function(){
+                this.parent();
+                ig.game.spawnEntity(EntityDeathExplosion, this.pos.x, this.pos.y);
             }
         })
     });

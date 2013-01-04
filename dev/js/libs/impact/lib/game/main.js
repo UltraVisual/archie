@@ -13,10 +13,12 @@ ig.module(
             gravity: 300,
             font: new ig.Font('media/04b03.font.png'),
             init: function () {
+                this.startPosition = {x: this.screen.x, y: this.screen.y};
                 ig.input.bind(ig.KEY.LEFT_ARROW, 'left');
                 ig.input.bind(ig.KEY.RIGHT_ARROW, 'right');
                 ig.input.bind(ig.KEY.UP_ARROW, 'jump');
                 ig.input.bind(ig.KEY.SPACE, 'jump');
+                ig.input.bind(ig.KEY.X, 'shoot');
                 this.loadLevel(LevelLevelOne);
             },
 
@@ -30,9 +32,15 @@ ig.module(
                 this.parent();
             },
 
+            resetPlayer:function(){
+                this.model.health = 10;
+                this.screen.x = this.startPosition.x;
+                this.screen.y = this.startPosition.y;
+            },
+
             _setCameraPosition: function () {
                 var player = this.getEntitiesByType(EntityArchie)[0];
-                if (player) {
+                if (player != undefined) {
                     if (player.hasPassedHalfway) {
                         this.screen.x = player.pos.x - ig.system.width * 0.5;
                     }
