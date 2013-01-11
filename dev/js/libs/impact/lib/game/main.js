@@ -18,6 +18,7 @@ ig.module(
             clearColor:null,
             levelIndex:0,
             self : null,
+            pictures: this.addImagesToPreloader(this.levels),
             hasInstructions : false,
             init: function () {
                 self = this;
@@ -29,6 +30,13 @@ ig.module(
                 ig.input.bind(ig.KEY.X, 'shoot');
                 ig.input.bind(ig.KEY.MOUSE1, 'mouse-pressed');
                 this.showStartScreen();
+            },
+            addImagesToPreloader: function (levels) {
+                for(var i = 0; i < levels.length; i++){
+                   if(levels[i].backGround){
+                       var tmpImage = new ig.Image(levels[i].backGround);
+                   }
+                }
             },
 
             showInstructions:function(){
