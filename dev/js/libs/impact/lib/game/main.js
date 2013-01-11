@@ -10,16 +10,20 @@ ig.module(
     )
     .defines(function () {
         MyGame = ig.Game.extend({
-            levels:[{level:LevelLevelOne, backGround:'media/sky.png', coins:8}],
+            levels: [
+                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8}
+            ],
             model: new PlayerModel(),
             gravity: 300,
             font: new ig.Font('media/04b03.font.png'),
-            background:null,
-            clearColor:null,
-            levelIndex:0,
-            self : null,
-            pictures: this.addImagesToPreloader(this.levels),
-            hasInstructions : false,
+            background: null,
+            clearColor: null,
+            levelIndex: 0,
+            self: null,
+            picOne: new ig.Image('media/sky.png'),
+            instructionsImage: new ig.Image('media/instructions.png'),
+            titleImage: new ig.Image('media/title.png'),
+            hasInstructions: false,
             init: function () {
                 self = this;
                 this.startPosition = {x: this.screen.x, y: this.screen.y};
@@ -31,16 +35,9 @@ ig.module(
                 ig.input.bind(ig.KEY.MOUSE1, 'mouse-pressed');
                 this.showStartScreen();
             },
-            addImagesToPreloader: function (levels) {
-                for(var i = 0; i < levels.length; i++){
-                   if(levels[i].backGround){
-                       var tmpImage = new ig.Image(levels[i].backGround);
-                   }
-                }
-            },
 
-            showInstructions:function(){
-                this.background = new ig.Image('media/instructions.png');
+            showInstructions: function () {
+                this.background = this.instructionsImage;
                 this.hasInstructions = true;
             },
 
@@ -50,26 +47,26 @@ ig.module(
                 self.index++;
             },
             showStartScreen: function () {
-                this.background = new ig.Image('media/title.png');
+                this.background = this.titleImage;
                 ig.game.spawnEntity(EntityStartButton, 550, 275)
             },
-            levelComplete:function(){
+            levelComplete: function () {
                 //todo once more levels are added this will go to another level until all are exhausted
-                 console.log('level complete');
+                console.log('level complete');
             },
 
-            addLevel:function(){
+            addLevel: function () {
                 this.model.coins.total = this.levels[this.levelIndex].coins;
                 this.model.coins.amount = 0;
                 var levelData = this.levels[this.levelIndex];
-                if(levelData.backGround){
+                if (levelData.backGround) {
                     this.background = new ig.Image(levelData.backGround);
                 }
                 this.loadLevel(levelData.level);
             },
 
             update: function () {
-                if(this.hasInstructions === true && ig.input.state('shoot')){
+                if (this.hasInstructions === true && ig.input.state('shoot')) {
                     this.showFirstLevel();
                 }
                 this._setCameraPosition();
@@ -82,7 +79,7 @@ ig.module(
                 this.parent();
             },
 
-            resetPlayer:function(){
+            resetPlayer: function () {
                 this.model.health = 10;
                 this.screen.x = this.startPosition.x;
                 this.screen.y = this.startPosition.y;
@@ -116,4 +113,5 @@ ig.module(
         });
 
         ig.main('#canvas', MyGame, 60, 1000, 750, 1);
-    });
+    })
+;
