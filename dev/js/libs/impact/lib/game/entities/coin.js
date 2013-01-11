@@ -15,6 +15,7 @@ ig.module(
                 if (typeof other.hit != 'undefined' && !this.tweenOut) {
                     ig.game.model.setScore(ig.game.model.score + 500);
                     this.tweenOut = true;
+                    ig.game.model.coins.amount += 1;
                     this.checkAgainst = ig.Entity.TYPE.NONE;
                 }
             }

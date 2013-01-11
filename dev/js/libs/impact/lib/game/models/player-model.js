@@ -11,6 +11,7 @@ ig.module(
             health: 10,
             pos: {x: 35, y: 35},
             score: 0,
+            coins:{total:0, amount:0},
             setHealth: function (val) {
                 this.health = val;
             },

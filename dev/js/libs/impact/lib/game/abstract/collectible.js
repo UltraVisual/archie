@@ -14,7 +14,7 @@ ig.module(
                 this.parent();
                 if (this.tweenOut) {
                     this.pos.y -= 2;
-                    this.currentAnim.alpha = this.currentAnim.alpha - 0.05;
+                    this.currentAnim.alpha -= 0.05;
                     if(this.currentAnim.alpha <= 0){
                         ig.game.removeEntity(this);
                     }

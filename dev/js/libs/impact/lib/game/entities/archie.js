@@ -70,8 +70,8 @@ ig.module(
                 var self = this;
                 if (!this.isHit) {
                     this.isHit = true;
-                    this.health = this.health - 2;
-                    if (this.health == 0) {
+                    this.health -= 2;
+                    if (this.health === 0) {
                         this.kill();
                     }
                     else {
@@ -99,6 +99,7 @@ ig.module(
                 this.currentJumpMode = 'jump-with-gun';
             },
             update: function () {
+                var self = this;
                 var acceleration = this.standing ? this.accelGround : this.accelAir;
                 if (ig.input.state('left')) {
                     this.accel.x = -acceleration;
@@ -110,9 +111,7 @@ ig.module(
                     this.flip = false;
                 }
                 else if (ig.input.state('shoot')) {
-                    var self = this;
-                    console.log(this.shootable && this.bullets == 0, this.hasGun)
-                    if (this.shootable && this.bullets == 0) {
+                    if (this.shootable && this.bullets === 0) {
                         this.shootable = false;
                         if (this.hasGun) {
                             this.bullets = 1;
@@ -130,8 +129,7 @@ ig.module(
                             }});
                         }
                     }
-                }
-                else {
+                } else {
                     this.accel.x = 0;
                 }
 
@@ -144,17 +142,15 @@ ig.module(
                 }
                 if (this.vel.y < 0) {
                     this.setAnim(this.anims[this.currentJumpMode])
-                }
-                else if (this.vel.y > 0) {
+                } else if (this.vel.y > 0) {
                     this.jumping = false;
                     this.jumpPressed = 0;
                     this.setAnim(this.anims[this.currentJumpMode]);
                 }
-                if (this.vel.x != 0) {
-                    this.currentAnim = this.anims[this.currentWalkMode];
-                }
-                else {
+                if (this.vel.x === 0) {
                     this.setAnim(this.anims[this.currentIdleMode]);
+                } else {
+                    this.currentAnim = this.anims[this.currentWalkMode];
                 }
                 this.currentAnim.alpha = this.alpha;
                 this.hasPassedHalfway = this.pos.x >= ig.system.width * 0.5;
