@@ -3,13 +3,14 @@ ig.module(
     )
     .requires(
         'impact.entity',
-        'game.abstract.collectible'
+        'game.abstract.collectible',
+        'game.models.sprites-data'
     )
     .defines(function () {
         EntityEgg = EntityCollectible.extend({
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
-                this.addAnim('idle', 1, [1]);
+                this.addAnim('idle', 1, [SpritesData.EGG]);
             },
             check: function (other) {
                 if (typeof other.hit != 'undefined' && !this.tweenOut && this.currentAnim.alpha > 0) {
@@ -20,7 +21,6 @@ ig.module(
                 }
             },
             update: function () {
-                console.log('collected coins', ig.game.model.coins.amount);
                 if (!this.tweenOut) {
                     if (ig.game.model.coins.amount == ig.game.model.coins.total) {
                         this.currentAnim.alpha = 1;

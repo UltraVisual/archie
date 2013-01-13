@@ -1,7 +1,9 @@
 *.iml
 /art
 /design
-/tools
-/weltmeister
 weltmeister.html
 *.iml
+dev/js/libs/impact/lib/impact
+dev/js/libs/impact/tools
+dev/js/libs/impact/lib/weltmeister
+dev/js/libs/tweenlite

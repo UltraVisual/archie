@@ -11,7 +11,7 @@ ig.module(
     .defines(function () {
         MyGame = ig.Game.extend({
             levels: [
-                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8}
+                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'}
             ],
             model: new PlayerModel(),
             gravity: 300,
@@ -36,6 +36,11 @@ ig.module(
                 this.showStartScreen();
             },
 
+            gameOver:function(){
+                console.log('Game over!');
+                //todo implement game over screen which will lead to the start screen after time
+            },
+
             showInstructions: function () {
                 this.background = this.instructionsImage;
                 this.hasInstructions = true;
@@ -53,6 +58,15 @@ ig.module(
             levelComplete: function () {
                 //todo once more levels are added this will go to another level until all are exhausted
                 console.log('level complete');
+
+            },
+
+            showIntroText: function (title) {
+                var introText = new ig.Font(title, 100, 100, ig.Font.ALIGN.CENTER);
+
+                introText.alpha = 0;
+
+
             },
 
             addLevel: function () {
@@ -63,6 +77,7 @@ ig.module(
                     this.background = new ig.Image(levelData.backGround);
                 }
                 this.loadLevel(levelData.level);
+                this.showIntroText(this.levels[this.levelIndex].title);
             },
 
             update: function () {

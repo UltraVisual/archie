@@ -41,8 +41,9 @@ ig.module(
             },
             draw: function () {
                 this.parent();
-                this.font.draw((this.currentHealth * 10).toString() + '%', (this.pos.x - ig.game.screen.x) + 180, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
-                this.font.draw("Coins:" + (ig.game.model ? ig.game.model.coins.amount + "/" + ig.game.model.coins.total : "0/0"), (this.pos.x - ig.game.screen.x) + 450, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
+                this.font.draw((this.currentHealth * 10).toString() + '%', (this.pos.x - ig.game.screen.x) + 170, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
+                this.font.draw("Lives:" + (ig.game.model ? ig.game.model.lives + "/3" : "0/0"), (this.pos.x - ig.game.screen.x) + 350, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
+                this.font.draw("Coins:" + (ig.game.model ? ig.game.model.coins.amount + "/" + ig.game.model.coins.total : "0/0"), (this.pos.x - ig.game.screen.x) + 550, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
                 this.font.draw("Score:" + (ig.game.model ? ig.game.model.score : 0).toString(), (this.pos.x - ig.game.screen.x) + 850, this.pos.y - ig.game.screen.y, ig.Font.ALIGN.LEFT);
             }
         })

@@ -1,3 +1,4 @@
+//todo implement lives?
 ig.module(
         'game.entities.archie'
     )
@@ -60,6 +61,10 @@ ig.module(
                 self.parent();
                 var x = self.startPosition.x;
                 var y = self.startPosition.y;
+                ig.game.model.setLives(ig.game.model.lives - 1);
+                if(ig.game.model.lives === 0){
+                    ig.game.gameOver();
+                }
                 ig.game.spawnEntity(EntityDeathExplosion, this.pos.x, this.pos.y, {callback: function () {
                     ig.game.resetPlayer();
                     ig.game.spawnEntity(EntityArchie, x, y)
@@ -70,6 +75,10 @@ ig.module(
                 var self = this;
                 if (!this.isHit) {
                     this.isHit = true;
+                    this.vel.y = -this.jump;
+                    //todo this needs to be implemented better
+                    this.flip ? this.accel.x = -this.accelGround : this.accelGround;
+                    this.jumping = true;
                     this.health -= 2;
                     if (this.health === 0) {
                         this.kill();
