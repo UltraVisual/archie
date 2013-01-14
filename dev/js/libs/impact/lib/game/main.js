@@ -6,7 +6,8 @@ ig.module(
         'impact.font',
         'game.levels.levelOne',
         'game.models.player-model',
-        'game.entities.start-button'
+        'game.entities.start-button',
+        'game.screens.end-of-level'
     )
     .defines(function () {
         MyGame = ig.Game.extend({
@@ -23,7 +24,9 @@ ig.module(
             picOne: new ig.Image('media/sky.png'),
             instructionsImage: new ig.Image('media/instructions.png'),
             titleImage: new ig.Image('media/title.png'),
+            levelDoneImage: new ig.Image('media/level-complete.png'),
             hasInstructions: false,
+            levelIsComplete: false,
             init: function () {
                 self = this;
                 this.startPosition = {x: this.screen.x, y: this.screen.y};
@@ -36,7 +39,7 @@ ig.module(
                 this.showStartScreen();
             },
 
-            gameOver:function(){
+            gameOver: function () {
                 console.log('Game over!');
                 //todo implement game over screen which will lead to the start screen after time
             },
@@ -49,41 +52,40 @@ ig.module(
             showFirstLevel: function () {
                 this.hasInstructions = false;
                 self.addLevel();
-                self.index++;
             },
             showStartScreen: function () {
                 this.background = this.titleImage;
                 ig.game.spawnEntity(EntityStartButton, 550, 275)
             },
-            levelComplete: function () {
-                //todo once more levels are added this will go to another level until all are exhausted
-                console.log('level complete');
-
+            showEndOfLevelScreen: function () {
+                this.levelIsComplete = true;
+                ig.system.setGame(EndOfLevelScreen)
             },
-
-            showIntroText: function (title) {
-                var introText = new ig.Font(title, 100, 100, ig.Font.ALIGN.CENTER);
-
-                introText.alpha = 0;
-
-
+            levelComplete: function () {
+                setTimeout(self.showEndOfLevelScreen, 1000)
             },
 
             addLevel: function () {
-                this.model.coins.total = this.levels[this.levelIndex].coins;
-                this.model.coins.amount = 0;
                 var levelData = this.levels[this.levelIndex];
-                if (levelData.backGround) {
-                    this.background = new ig.Image(levelData.backGround);
+                if (typeof levelData != 'undefined') {
+                    this.model.coins.total = levelData.coins;
+                    this.model.coins.amount = 0;
+                    if (levelData.backGround) {
+                        this.background = new ig.Image(levelData.backGround);
+                    }
+                    this.loadLevelDeferred(levelData.level);
+                    this.levelIndex++;
                 }
-                this.loadLevel(levelData.level);
-                this.showIntroText(this.levels[this.levelIndex].title);
             },
 
             update: function () {
                 if (this.hasInstructions === true && ig.input.state('shoot')) {
                     this.showFirstLevel();
                 }
+                else if (this.levelIsComplete === true && ig.input.state('shoot')) {
+                    self.addLevel();
+                }
+
                 this._setCameraPosition();
                 this._checkCameraIsInBounds.call(this);
                 this.parent();
