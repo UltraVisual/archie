@@ -5,14 +5,15 @@ ig.module(
         'impact.game',
         'impact.font',
         'game.levels.levelOne',
+        'game.levels.levelTwo',
         'game.models.player-model',
-        'game.entities.start-button',
-        'game.screens.end-of-level'
+        'game.entities.start-button'
     )
     .defines(function () {
         MyGame = ig.Game.extend({
             levels: [
-                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'}
+                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'},
+                {level: LevelLevelTwo, backGround: 'media/sky.png', coins: 29, title: 'Level Two - Closer to the Gate'}
             ],
             model: new PlayerModel(),
             gravity: 300,
@@ -24,7 +25,7 @@ ig.module(
             picOne: new ig.Image('media/sky.png'),
             instructionsImage: new ig.Image('media/instructions.png'),
             titleImage: new ig.Image('media/title.png'),
-            levelDoneImage: new ig.Image('media/level-complete.png'),
+            levelDoneImage: new ig.Image("media/level-complete.png"),
             hasInstructions: false,
             levelIsComplete: false,
             init: function () {
@@ -32,6 +33,7 @@ ig.module(
                 this.startPosition = {x: this.screen.x, y: this.screen.y};
                 ig.input.bind(ig.KEY.LEFT_ARROW, 'left');
                 ig.input.bind(ig.KEY.RIGHT_ARROW, 'right');
+                ig.input.bind(ig.KEY.R, 'restart');
                 ig.input.bind(ig.KEY.UP_ARROW, 'jump');
                 ig.input.bind(ig.KEY.SPACE, 'jump');
                 ig.input.bind(ig.KEY.X, 'shoot');
@@ -39,14 +41,23 @@ ig.module(
                 this.showStartScreen();
             },
 
+            restartLevel:function(){
+                this.levelIndex--;
+                this.addLevel();
+            },
+
             gameOver: function () {
-                console.log('Game over!');
                 //todo implement game over screen which will lead to the start screen after time
             },
 
             showInstructions: function () {
                 this.background = this.instructionsImage;
                 this.hasInstructions = true;
+            },
+
+            removeLevel:function(){
+                this.entities = [];
+                this.backgroundMaps = [];
             },
 
             showFirstLevel: function () {
@@ -58,8 +69,8 @@ ig.module(
                 ig.game.spawnEntity(EntityStartButton, 550, 275)
             },
             showEndOfLevelScreen: function () {
-                this.levelIsComplete = true;
-                ig.system.setGame(EndOfLevelScreen)
+                this.removeLevel();
+                self.levelIsComplete = true;
             },
             levelComplete: function () {
                 setTimeout(self.showEndOfLevelScreen, 1000)
@@ -75,14 +86,20 @@ ig.module(
                     }
                     this.loadLevelDeferred(levelData.level);
                     this.levelIndex++;
+                    this.levelDoneImage = new ig.Image("media/level-complete.png");
                 }
             },
 
             update: function () {
+                if(ig.input.state('restart')){
+                    this.restartLevel()
+                }
                 if (this.hasInstructions === true && ig.input.state('shoot')) {
+                    this.hasInstructions = false;
                     this.showFirstLevel();
                 }
-                else if (this.levelIsComplete === true && ig.input.state('shoot')) {
+                if (this.levelIsComplete === true && ig.input.state('shoot')) {
+                    this.levelIsComplete = false;
                     self.addLevel();
                 }
 
@@ -92,7 +109,12 @@ ig.module(
             },
 
             draw: function () {
-                this.background.draw(0, 0);
+                if(this.levelIsComplete === true){
+                    this.levelDoneImage.draw(0, 0);
+                }
+                else{
+                    this.background.draw(0, 0);
+                }
                 this.parent();
             },
 
