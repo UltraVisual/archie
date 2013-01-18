@@ -9,7 +9,8 @@ ig.module(
     )
     .defines(function () {
         EntityArchie = ig.Entity.extend({
-            size: {x: 32, y: 48},
+            size: {x: 20, y: 48},
+            offset:{x:4, y: 0},
             friction: {x: 600, y: 0},
             animSheet: new ig.AnimationSheet('media/archie.png', 42, 48),
             maxVel: {x: 100, y: 150},
@@ -78,7 +79,6 @@ ig.module(
                     this.vel.y = -this.jump;
                     this.flip ? this.accel.x = -this.accelGround : this.accelGround;
                     this.jumping = true;
-                    console.log(value)
                     this.health -= value ? value : 2;
                     if (this.health <= 0) {
                         this.kill();

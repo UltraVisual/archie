@@ -49,7 +49,7 @@ ig.module(
             hit: function () {
                 this.kill();
             },
-            kill:function(){
+            kill: function () {
                 this.parent();
                 ig.game.spawnEntity(EntityDeathExplosion, this.pos.x, this.pos.y);
             }

@@ -45,7 +45,6 @@ ig.module(
                 }
                 else if (this.direction == 'horizontal') {
                     var maxRight = (this.leftDistance + this.rightDistance) * 32;
-                    console.log(maxRight)
                     if ((this.pos.x < this.startPosition.x) || this.pos.x > (this.startPosition.x + maxRight)) {
                         this.speed *= -1
                     }

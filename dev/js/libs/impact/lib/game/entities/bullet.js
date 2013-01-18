@@ -13,7 +13,7 @@ ig.module(
             timer: null,
             life: 2,
             maxVel: {x: 200, y: 0},
-            checkAgainst: ig.Entity.TYPE.B,
+            checkAgainst: ig.Entity.TYPE.BOTH,
             type: ig.Entity.TYPE.NONE,
             collides: ig.Entity.COLLIDES.PASSIVE,
             tweenOut: false,
@@ -25,11 +25,11 @@ ig.module(
             },
             update: function () {
                 this.parent();
-                if (this.timer != null && this.timer.delta() > this.life) {
+                if (this.timer !== null && this.timer.delta() > this.life) {
                     this.timer = null;
                     if (this.callback) this.callback();
                 }
-                if (this.timer != null && this.timer.delta() > 0.2) {
+                if (this.timer !== null && this.timer.delta() > 0.2) {
                     if (this.resetCallback) this.resetCallback();
                 }
             },
@@ -42,8 +42,9 @@ ig.module(
                 }
             },
             check: function (other) {
-                if (typeof other != 'EntityArchie' && typeof other.hit != 'undefined') {
+                if (typeof other.hit != 'undefined') {
                     other.hit();
+                    this.kill();
                 }
             },
             kill:function(){

@@ -38,7 +38,7 @@ ig.module(
                     this.pos.y -= 2;
                     var number = this.startPosition.y - (this.distance * 32);
                     if (this.pos.y < number) {
-                        this.timer.reset()
+                        this.timer.reset();
                         this.animate = false;
                         this.currentAnim.alpha = 0;
                         this.pos.y = this.startPosition.y;
