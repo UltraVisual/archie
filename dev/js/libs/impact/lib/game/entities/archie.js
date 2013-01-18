@@ -71,16 +71,16 @@ ig.module(
                 }});
 
             },
-            hit: function () {
+            hit: function (value) {
                 var self = this;
                 if (!this.isHit) {
                     this.isHit = true;
                     this.vel.y = -this.jump;
-                    //todo this needs to be implemented better
                     this.flip ? this.accel.x = -this.accelGround : this.accelGround;
                     this.jumping = true;
-                    this.health -= 2;
-                    if (this.health === 0) {
+                    console.log(value)
+                    this.health -= value ? value : 2;
+                    if (this.health <= 0) {
                         this.kill();
                     }
                     else {

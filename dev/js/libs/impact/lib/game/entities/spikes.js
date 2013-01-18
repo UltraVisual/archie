@@ -16,7 +16,7 @@ ig.module(
             },
             check:function(other){
                 if (typeof other.hit != 'undefined'){
-                    other.hit();
+                    other.hit(5);
                 }
             }
         })

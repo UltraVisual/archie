@@ -6,14 +6,18 @@ ig.module(
         'impact.font',
         'game.levels.levelOne',
         'game.levels.levelTwo',
+        'game.levels.levelThree',
+        'game.levels.levelFour',
         'game.models.player-model',
         'game.entities.start-button'
     )
     .defines(function () {
         MyGame = ig.Game.extend({
             levels: [
+                {level: LevelLevelFour, backGround: 'media/sky-red.png', coins: 25, title: 'Level Four - The Castle Causeway'},
                 {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'},
-                {level: LevelLevelTwo, backGround: 'media/sky.png', coins: 29, title: 'Level Two - Closer to the Gate'}
+                {level: LevelLevelTwo, backGround: 'media/sky-orange.png', coins: 29, title: 'Level Two - Closer to the Gate'},
+                {level: LevelLevelThree, backGround: 'media/sky-red.png', coins: 29, title: 'Level Three - Into the Castle'}
             ],
             model: new PlayerModel(),
             gravity: 300,
@@ -39,6 +43,10 @@ ig.module(
                 ig.input.bind(ig.KEY.X, 'shoot');
                 ig.input.bind(ig.KEY.MOUSE1, 'mouse-pressed');
                 this.showStartScreen();
+            },
+
+            getLifeValue:function(){
+                return Math.random() * 10;
             },
 
             restartLevel:function(){
@@ -69,7 +77,7 @@ ig.module(
                 ig.game.spawnEntity(EntityStartButton, 550, 275)
             },
             showEndOfLevelScreen: function () {
-                this.removeLevel();
+                self.removeLevel();
                 self.levelIsComplete = true;
             },
             levelComplete: function () {

@@ -7,9 +7,10 @@ ig.module(
     .defines(function () {
         SpritesData = {
             SPIKES:0,
-            EGG:2,
+            EGG:3,
             GUN:1,
-            COIN:3
+            COIN:4,
+            FIRE_BALL:2
         };
 
     });
