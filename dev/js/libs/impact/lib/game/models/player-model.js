@@ -21,6 +21,9 @@ ig.module(
             },
             setLives:function(val){
                this.lives = val;
+            },
+            setCoins:function(val){
+               this.coins.amount = val;
             }
         };
     });

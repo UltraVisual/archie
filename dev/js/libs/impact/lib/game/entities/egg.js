@@ -8,12 +8,14 @@ ig.module(
     )
     .defines(function () {
         EntityEgg = EntityCollectible.extend({
+            sound: new ig.Sound('media/sounds/egg.*'),
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.addAnim('idle', 1, [SpritesData.EGG]);
             },
             check: function (other) {
                 if (typeof other.hit != 'undefined' && !this.tweenOut && this.currentAnim.alpha > 0) {
+                    this.sound.play();
                     ig.game.model.setScore(ig.game.model.score + 1000);
                     this.tweenOut = true;
                     this.checkAgainst = ig.Entity.TYPE.NONE;

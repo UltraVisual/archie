@@ -15,6 +15,6 @@ ig.module(
                 this.parent();
                 console.log(this.checkAgainst)
                 this.currentAnim.flip.x = this.flip;
-            },
+            }
         })
     });

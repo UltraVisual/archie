@@ -16,6 +16,8 @@ ig.module(
             checkAgainst: ig.Entity.TYPE.BOTH,
             hasCollided: false,
             maxVel: {x: 100, y: 100},
+            dieSound: new ig.Sound('media/sounds/dino-die.*'),
+            justFlipped:false,
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.addAnim('idle', 1, [0]);
@@ -25,7 +27,12 @@ ig.module(
             update: function () {
                 if (!ig.game.collisionMap.getTile(this.pos.x + (this.flip ? 0 : this.size.x), this.pos.y + this.size.y + 1) || this.hasCollided) {
                     this.hasCollided = false;
-                    this.flip = !this.flip;
+                    if (this.justFlipped) {
+                        this.justFlipped = false;
+                    } else {
+                        this.flip = !this.flip;
+                        this.justFlipped = true
+                    }
                 }
                 var xdir = this.flip ? 3 : -3;
                 this.vel.x = this.speed * xdir;
@@ -51,6 +58,7 @@ ig.module(
             },
             kill: function () {
                 this.parent();
+                this.dieSound.play();
                 ig.game.spawnEntity(EntityDeathExplosion, this.pos.x, this.pos.y);
             }
         })

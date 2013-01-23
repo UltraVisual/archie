@@ -3,6 +3,6 @@
   "name": "archie",
   "version": "0.0.1",
   "devDependencies": {
-    "grunt-contrib-uglify": "*"
+    "grunt-shell": "*"
   }
 }

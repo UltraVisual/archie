@@ -1,5 +1,0 @@
-coin.png:128:0:32:32
-egg.png:96:0:32:32
-fire-ball.png:64:0:32:32
-gun.png:32:0:32:32
-spikes.png:0:0:32:32

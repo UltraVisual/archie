@@ -1,3 +1,8 @@
+//,
+//{level: LevelLevelTwo, backGround: 'media/sky-orange.png', coins: 29, title: 'Level Two - Closer to the Gate'},
+//{level: LevelLevelThree, backGround: 'media/sky-red.png', coins: 31, title: 'Level Three - Into the Castle'},
+//{level: LevelLevelFour, backGround: 'media/sky-red.png', coins: 25, title: 'Level Four - The Courtyard'}
+
 ig.module(
         'game.main'
     )
@@ -14,10 +19,7 @@ ig.module(
     .defines(function () {
         MyGame = ig.Game.extend({
             levels: [
-                {level: LevelLevelFour, backGround: 'media/sky-red.png', coins: 25, title: 'Level Four - The Castle Causeway'},
-                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'},
-                {level: LevelLevelTwo, backGround: 'media/sky-orange.png', coins: 29, title: 'Level Two - Closer to the Gate'},
-                {level: LevelLevelThree, backGround: 'media/sky-red.png', coins: 29, title: 'Level Three - Into the Castle'}
+                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'}
             ],
             model: new PlayerModel(),
             gravity: 300,
@@ -27,11 +29,16 @@ ig.module(
             levelIndex: 0,
             self: null,
             picOne: new ig.Image('media/sky.png'),
-            instructionsImage: new ig.Image('media/instructions.png'),
+            instructionsScreen: new ig.Image('media/instructions.png'),
             titleImage: new ig.Image('media/title.png'),
             levelDoneImage: new ig.Image("media/level-complete.png"),
+            picTwo: new ig.Image("media/sky-red.png"),
+            picThree: new ig.Image("media/sky-orange.png"),
+            successScreen: new ig.Image("media/success.png"),
+            failureScreen: new ig.Image("media/game-over.png"),
             hasInstructions: false,
             levelIsComplete: false,
+            startData: null,
             init: function () {
                 self = this;
                 this.startPosition = {x: this.screen.x, y: this.screen.y};
@@ -45,25 +52,30 @@ ig.module(
                 this.showStartScreen();
             },
 
-            getLifeValue:function(){
+            getLifeValue: function () {
                 return Math.random() * 10;
             },
 
-            restartLevel:function(){
-                this.levelIndex--;
-                this.addLevel();
+            restartLevel: function () {
+                self.model.setHealth(self.startData.health);
+                self.model.setLives(self.startData.lives);
+                self.model.setScore(0);
+                self.model.setCoins(0);
+                self.levelIndex--;
+                self.addLevel();
             },
 
             gameOver: function () {
-                //todo implement game over screen which will lead to the start screen after time
+                this.removeLevel();
+                this.background = this.failureScreen;
             },
 
             showInstructions: function () {
-                this.background = this.instructionsImage;
+                this.background = this.instructionsScreen;
                 this.hasInstructions = true;
             },
 
-            removeLevel:function(){
+            removeLevel: function () {
                 this.entities = [];
                 this.backgroundMaps = [];
             },
@@ -79,12 +91,24 @@ ig.module(
             showEndOfLevelScreen: function () {
                 self.removeLevel();
                 self.levelIsComplete = true;
+                self.levelDoneImage = new ig.Image("media/level-complete.png");
+            },
+            gameComplete: function () {
+                self.removeLevel();
+                self.background = self.successScreen;
             },
             levelComplete: function () {
-                setTimeout(self.showEndOfLevelScreen, 1000)
+                console.log(this.levels.length, this.levelIndex)
+                if(this.levelIndex < this.levels.length){
+                    setTimeout(self.showEndOfLevelScreen, 1000)
+                }
+                else{
+                    setTimeout(self.gameComplete, 1000)
+                }
             },
 
             addLevel: function () {
+                this.startData = {lives: this.model.lives, health: this.model.health};
                 var levelData = this.levels[this.levelIndex];
                 if (typeof levelData != 'undefined') {
                     this.model.coins.total = levelData.coins;
@@ -94,22 +118,26 @@ ig.module(
                     }
                     this.loadLevelDeferred(levelData.level);
                     this.levelIndex++;
-                    this.levelDoneImage = new ig.Image("media/level-complete.png");
                 }
             },
 
             update: function () {
-                if(ig.input.state('restart')){
-                    this.restartLevel()
+                if (ig.input.state('restart')) {
+                    this.restartLevel();
                 }
-                if (this.hasInstructions === true && ig.input.state('shoot')) {
-                    this.hasInstructions = false;
-                    this.showFirstLevel();
+                else if(ig.input.state('shoot')){
+                    if (this.background == this.instructionsScreen) {
+                        this.showFirstLevel();
+                    }
+                    else if (this.levelIsComplete === true) {
+                        this.levelIsComplete = false;
+                        self.addLevel();
+                    }
+                    else if(this.background === this.failureScreen || this.background === this.successScreen){
+                        ig.system.setGame(MyGame);
+                    }
                 }
-                if (this.levelIsComplete === true && ig.input.state('shoot')) {
-                    this.levelIsComplete = false;
-                    self.addLevel();
-                }
+
 
                 this._setCameraPosition();
                 this._checkCameraIsInBounds.call(this);
@@ -117,10 +145,10 @@ ig.module(
             },
 
             draw: function () {
-                if(this.levelIsComplete === true){
+                if (this.levelIsComplete === true) {
                     this.levelDoneImage.draw(0, 0);
                 }
-                else{
+                else {
                     this.background.draw(0, 0);
                 }
                 this.parent();

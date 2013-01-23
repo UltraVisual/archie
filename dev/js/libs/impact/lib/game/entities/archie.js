@@ -38,6 +38,11 @@ ig.module(
             bullets: 0,
             oldAnim: null,
             keyDown: false,
+            hitSound: new ig.Sound('media/sounds/hurt.*'),
+            jumpSound: new ig.Sound('media/sounds/jump.*'),
+            shootSound: new ig.Sound('media/sounds/shoot.*'),
+            dieSound: new ig.Sound('media/sounds/die.*'),
+            respawnSound: new ig.Sound('media/sounds/respawn.*'),
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.startPosition = {x: x, y: y};
@@ -68,8 +73,10 @@ ig.module(
                 }
                 ig.game.spawnEntity(EntityDeathExplosion, this.pos.x, this.pos.y, {callback: function () {
                     ig.game.resetPlayer();
-                    ig.game.spawnEntity(EntityArchie, x, y)
+                    ig.game.spawnEntity(EntityArchie, x, y);
+                    self.respawnSound.play();
                 }});
+                this.dieSound.play();
 
             },
             hit: function (value) {
@@ -89,6 +96,7 @@ ig.module(
                         }, 200);
                     }
                 }
+                this.hitSound.play();
                 this.model.setHealth(this.health);
             },
             flash: function () {
@@ -136,6 +144,8 @@ ig.module(
                                     self.oldAnim = null
                                 }
                             }});
+
+                            this.shootSound.play();
                         }
                     }
                 } else {
@@ -147,6 +157,7 @@ ig.module(
                         this.vel.y = -this.jump;
                         this.jumping = true;
                         this.jumpPressed++;
+                        this.jumpSound.play();
                     }
                 }
                 if (this.vel.y < 0) {
