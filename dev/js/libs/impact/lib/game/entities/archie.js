@@ -20,8 +20,8 @@ ig.module(
             flip: false,
             jumping: false,
             accelGround: 400,
-            accelAir: 400,
-            jump: 400,
+            accelAir: 600,
+            jump: 800,
             health: 10,
             isHit: false,
             flashAmount: 0,
@@ -56,11 +56,17 @@ ig.module(
                 this.flip = false;
                 this.model = ig.game.model || new PlayerModel();
                 this.health = this.model.health;
+                if(ig.game.model.hasGun === true){
+                    this.enableGun();
+                }
             },
             reset: function () {
                 this.alpha = 1;
                 this.isHit = false;
                 this.flashAmount = 0;
+            },
+            triggerCollision: function () {
+                this.hasCollided = true;
             },
             kill: function () {
                 var self = this;
@@ -76,9 +82,14 @@ ig.module(
                     ig.game.spawnEntity(EntityArchie, x, y);
                     self.respawnSound.play();
                 }});
+                ig.game.model.hasGun = false;
                 this.dieSound.play();
 
             },
+            toString:function(){
+                return 'Archie';
+            },
+
             hit: function (value) {
                 var self = this;
                 if (!this.isHit) {
@@ -110,6 +121,7 @@ ig.module(
                 }
             },
             enableGun: function () {
+                ig.game.model.hasGun = true;
                 this.shootable = this.hasGun = true;
                 this.currentWalkMode = 'walk-with-gun';
                 this.currentIdleMode = 'idle-with-gun';
@@ -134,8 +146,7 @@ ig.module(
                             this.bullets = 1;
                             this.oldAnim = this.currentAnim;
                             this.currentAnim = this.anims['shooting'];
-
-                            ig.game.spawnEntity(EntityBullet, this.pos.x, this.pos.y, {flip: this.flip, callback: function () {
+                            ig.game.spawnEntity(EntityBullet, this.pos.x + (this.flip ? 0 : 32), this.pos.y + 16, {flip: this.flip, callback: function () {
                                 self.shootable = true;
                                 self.bullets = 0;
                             }, resetCallback: function () {

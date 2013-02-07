@@ -13,13 +13,18 @@ ig.module(
         'game.levels.levelTwo',
         'game.levels.levelThree',
         'game.levels.levelFour',
+        'game.levels.levelFive',
         'game.models.player-model',
         'game.entities.start-button'
     )
     .defines(function () {
         MyGame = ig.Game.extend({
             levels: [
-                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'}
+                {level: LevelLevelOne, backGround: 'media/sky.png', coins: 8, title: 'Level One - The Outer Reaches'},
+                {level: LevelLevelTwo, backGround: 'media/sky-orange.png', coins: 29, title: 'Level Two - Closer to the Gate'},
+                {level: LevelLevelThree, backGround: 'media/sky-red.png', coins: 31, title: 'Level Three - Into the Castle'},
+                {level: LevelLevelFour, backGround: 'media/sky-red.png', coins: 25, title: 'Level Four - The Courtyard'},
+                {level: LevelLevelFive, backGround: 'media/night-sky.png', coins: 41, title: 'Level Five - The Courtyard'}
             ],
             model: new PlayerModel(),
             gravity: 300,
@@ -28,6 +33,7 @@ ig.module(
             clearColor: null,
             levelIndex: 0,
             self: null,
+            startScore:0,
             picOne: new ig.Image('media/sky.png'),
             instructionsScreen: new ig.Image('media/instructions.png'),
             titleImage: new ig.Image('media/title.png'),
@@ -41,6 +47,12 @@ ig.module(
             startData: null,
             init: function () {
                 self = this;
+                if(ig.ua.mobile){
+                    ig.Sound.enabled = false;
+                }
+                ig.music.add('media/sounds/Archie.*');
+                ig.music.volume = 0.3;
+                ig.music.play();
                 this.startPosition = {x: this.screen.x, y: this.screen.y};
                 ig.input.bind(ig.KEY.LEFT_ARROW, 'left');
                 ig.input.bind(ig.KEY.RIGHT_ARROW, 'right');
@@ -59,7 +71,7 @@ ig.module(
             restartLevel: function () {
                 self.model.setHealth(self.startData.health);
                 self.model.setLives(self.startData.lives);
-                self.model.setScore(0);
+                self.model.setScore(this.startScore);
                 self.model.setCoins(0);
                 self.levelIndex--;
                 self.addLevel();
@@ -98,7 +110,7 @@ ig.module(
                 self.background = self.successScreen;
             },
             levelComplete: function () {
-                console.log(this.levels.length, this.levelIndex)
+                this.startScore = this.model.score;
                 if(this.levelIndex < this.levels.length){
                     setTimeout(self.showEndOfLevelScreen, 1000)
                 }
@@ -108,6 +120,7 @@ ig.module(
             },
 
             addLevel: function () {
+                this.model.setScore(this.startScore)
                 this.startData = {lives: this.model.lives, health: this.model.health};
                 var levelData = this.levels[this.levelIndex];
                 if (typeof levelData != 'undefined') {
@@ -119,6 +132,7 @@ ig.module(
                     this.loadLevelDeferred(levelData.level);
                     this.levelIndex++;
                 }
+                ig.music.stop();
             },
 
             update: function () {

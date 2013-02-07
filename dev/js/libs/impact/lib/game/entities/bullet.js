@@ -9,7 +9,7 @@ ig.module(
             animSheet: new ig.AnimationSheet('media/bullet.png', 16, 16),
             size: {x: 2, y: 1},
             callback: null,
-            resetCallback:null,
+            resetCallback: null,
             timer: null,
             life: 2,
             maxVel: {x: 200, y: 0},
@@ -18,7 +18,7 @@ ig.module(
             collides: ig.Entity.COLLIDES.PASSIVE,
             tweenOut: false,
             init: function (x, y, settings) {
-                this.parent(x + (settings.flip ? -4 : 8), y - 1, settings);
+                this.parent(x, y, settings);
                 this.vel.x = this.accel.x = (settings.flip ? -this.maxVel.x : this.maxVel.x);
                 this.addAnim('idle', 0.2, [0]);
                 this.timer = new ig.Timer();
@@ -42,12 +42,12 @@ ig.module(
                 }
             },
             check: function (other) {
-                if (typeof other.hit != 'undefined') {
+                if (typeof other.hit != 'undefined' && other.toString() !== 'Archie') {
                     other.hit();
                     this.kill();
                 }
             },
-            kill:function(){
+            kill: function () {
                 this.parent();
                 if (this.callback) this.callback();
             }

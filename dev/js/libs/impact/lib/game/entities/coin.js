@@ -16,7 +16,6 @@ ig.module(
             },
             check: function (other) {
                 if (typeof other.hit != 'undefined' && !this.tweenOut) {
-                    console.log('gonna play some sound!!!')
                     this.sound.play();
                     ig.game.model.setScore(ig.game.model.score + 500);
                     this.tweenOut = true;

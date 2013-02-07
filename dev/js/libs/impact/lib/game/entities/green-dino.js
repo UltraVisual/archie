@@ -21,20 +21,22 @@ ig.module(
             init: function (x, y, settings) {
                 this.parent(x, y, settings);
                 this.addAnim('idle', 1, [0]);
-                this.addAnim('walk', 0.03, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
+                this.addAnim('walk', 0.03, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].reverse());
                 this.currentAnim = this.anims['walk'];
             },
             update: function () {
+                var self = this;
                 if (!ig.game.collisionMap.getTile(this.pos.x + (this.flip ? 0 : this.size.x), this.pos.y + this.size.y + 1) || this.hasCollided) {
-                    this.hasCollided = false;
-                    if (this.justFlipped) {
-                        this.justFlipped = false;
-                    } else {
-                        this.flip = !this.flip;
-                        this.justFlipped = true
+                    self.hasCollided = false;
+                    if (!self.justFlipped) {
+                        self.flip = !this.flip;
+                        self.justFlipped = true;
+                        setTimeout(function(){
+                            self.justFlipped = false;
+                        }, 1000)
                     }
                 }
-                var xdir = this.flip ? 3 : -3;
+                var xdir = this.flip ? 2 : -2;
                 this.vel.x = this.speed * xdir;
                 this.currentAnim.flip.x = this.flip;
                 this.parent();

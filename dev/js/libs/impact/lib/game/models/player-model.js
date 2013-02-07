@@ -13,6 +13,7 @@ ig.module(
             score: 0,
             lives:3,
             coins:{total:0, amount:0},
+            hasGun:false,
             setHealth: function (val) {
                 this.health = val;
             },
